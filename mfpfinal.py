@@ -24,7 +24,7 @@ X = df2.drop(columns=["Machine failure", "Type of Machine Failure"], axis=1)
 # Assign target columns to y
 y = df2["Machine failure"]
 # import library
-from sklearn.model_selection import train_test_split
+
 # split the data into train, test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 X_train.shape, X_test.shape, y_train.shape, y_test.shape
