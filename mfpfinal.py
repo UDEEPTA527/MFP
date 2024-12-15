@@ -1,10 +1,12 @@
+import os
+print("Current working directory:", os.getcwd())
 import numpy as np
 import pickle
 import streamlit as st
 import warnings
 
 # Load the saved models
-loaded_machine_failure_model = pickle.load(open("machine_failure.pkl", 'rb'))
+loaded_machine_failure_model = pickle.load(open("Machine_failure.pkl", 'rb'))
 loaded_failure_type_model = pickle.load(open("failure_type_model.pkl", 'rb'))
 
 def predict_machine_failure(input_data):
