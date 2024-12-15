@@ -4,7 +4,7 @@ import streamlit as st
 import warnings
 
 # Load the saved models
-loaded_machine_failure_model = pickle.load(open("Machine_failure.sav", 'rb'))
+loaded_machine_failure_model = pickle.load(open("machine_failure.sav", 'rb'))
 loaded_failure_type_model = pickle.load(open("failure_type_model.sav", 'rb'))
 
 def predict_machine_failure(input_data):
