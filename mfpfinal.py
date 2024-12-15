@@ -26,8 +26,7 @@ y = df2["Machine failure"]
 # import library
 
 # split the data into train, test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
-X_train.shape, X_test.shape, y_train.shape, y_test.shape
+
 from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
