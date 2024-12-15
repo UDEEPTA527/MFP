@@ -18,18 +18,8 @@ warnings.filterwarnings("ignore")
 df2 = pd.read_csv('cleaned_data.csv')
 df2.describe()
 
-# Drop the target columns from X
 X = df2.drop(columns=["Machine failure", "Type of Machine Failure"], axis=1)
-
-# Assign target columns to y
 y = df2["Machine failure"]
-# import library
-
-# split the data into train, test set
-
-
-from sklearn.metrics import accuracy_score, classification_report
-import numpy as np
 
 def classify(model, X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0) 
