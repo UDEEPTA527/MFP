@@ -42,7 +42,7 @@ hyperparameters = {
     'max_depth': 20
 }
 
-rf_cl.fit(X, y)
+
 
 
 # In[19]:
