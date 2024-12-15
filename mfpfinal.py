@@ -1,5 +1,3 @@
-import os
-print("Current working directory:", os.getcwd())
 import numpy as np
 import pickle
 import streamlit as st
