@@ -42,18 +42,6 @@ hyperparameters = {
     'max_depth': 20
 }
 
-
-
-
-# In[19]:
-
-
-import joblib
-
-
-# In[21]:
-
-
 # Filter rows where machine failure occurred for the second model
 failure_data = df2[df2['Machine failure'] == 1]
 X_failure_type = failure_data[['Type', 'Air temperature [K]', 'Process temperature [K]', 'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]']]
