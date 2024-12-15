@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 df2 = pd.read_csv('cleaned_data.csv')
 df2.describe()
-from sklearn.feature_selection import chi2
+
 # Drop the target columns from X
 X = df2.drop(columns=["Machine failure", "Type of Machine Failure"], axis=1)
 
