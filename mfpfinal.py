@@ -1,48 +1,52 @@
 import numpy as np
 import pickle
-import sklearn
 import streamlit as st
+from sklearn.exceptions import NotFittedError
 import warnings
 
 # Load the saved models
-loaded_machine_failure_model = pickle.load(open("Machine_failure.pkl", 'rb'))
-loaded_failure_type_model = pickle.load(open("failure_type_model.pkl", 'rb'))
+try:
+    loaded_machine_failure_model = pickle.load(open("Machine_failure.pkl", 'rb'))
+    loaded_failure_type_model = pickle.load(open("failure_type_model.pkl", 'rb'))
+except FileNotFoundError:
+    st.error("Model files not found. Please ensure 'Machine_failure.pkl' and 'failure_type_model.pkl' are in the working directory.")
+    st.stop()
 
 def predict_machine_failure(input_data):
-    """
-    Predict machine failure and failure type.
-    """
+    """Predict machine failure and failure type."""
     try:
-        # Convert input data to a NumPy array
+        # Convert input data to numpy array
         input_data_as_numpy_array = np.asarray(input_data, dtype=float).reshape(1, -1)
         
-        # Predict machine failure
+        # Predict machine failure (binary classification)
         machine_failure = loaded_machine_failure_model.predict(input_data_as_numpy_array)
         
-        # Predict failure type
+        # Predict failure type (multi-class classification)
         failure_type = loaded_failure_type_model.predict(input_data_as_numpy_array)
         
         return machine_failure[0], failure_type[0], None  # Return predictions and no error
+    except NotFittedError as e:
+        return None, None, "Models are not properly trained or fitted. Please check the model files."
+    except ValueError as e:
+        return None, None, f"Input shape mismatch: {e}. Please ensure all inputs are provided correctly."
     except Exception as e:
-        return None, None, str(e)  # Return None and error message
+        return None, None, str(e)  # Return None and the error message in case of an exception
 
 def validate_input(input_data):
-    """
-    Validate user inputs.
-    """
+    """Validate user inputs."""
     error_messages = {}
-    input_field_names = [
-        'Type', 'Air Temperature', 'Process Temperature', 
-        'Rotational Speed', 'Torque', 'Tool Wear'
-    ]
+    
+    # Input field names for reference
+    input_field_names = ['Type','Air Temperature', 'Process Temperature', 'Rotational Speed', 'Torque','Tool Wear']
     
     for i, val in enumerate(input_data):
         field_name = input_field_names[i]
+        
         if not val:
             error_messages[field_name] = f"{field_name} is missing."
         else:
             try:
-                # Check if the input can be converted to float
+                # Convert value to float and check for negatives
                 float_val = float(val)
                 if float_val < 0:
                     error_messages[field_name] = f"{field_name} cannot be negative."
@@ -52,33 +56,32 @@ def validate_input(input_data):
     return error_messages
 
 def main():
-    """
-    Streamlit app for Machine Failure Prediction.
-    """
-    st.title("Machine Failure Prediction Web App")
+    st.title('Machine Failure Prediction Web App')
     
-    # Input fields
+    # Input fields for user
     col1, col2 = st.columns(2)
-    input_field_names = [
-        'Type', 'Air Temperature', 'Process Temperature', 
-        'Rotational Speed', 'Torque', 'Tool Wear'
-    ]
+    
+    # Input field names
+    input_field_names = ['Type','Air Temperature', 'Process Temperature', 'Rotational Speed', 'Torque','Tool Wear']
     input_data = {}
     
     for i, field_name in enumerate(input_field_names):
         with col1 if i % 2 == 0 else col2:
             input_data[field_name] = st.text_input(f"{i+1}. {field_name} value")
     
-    # Placeholders for results
+    # Placeholders for results and error messages
     machine_failure_result = ""
     failure_type_result = ""
     prediction_error_message = ""
     
-    # Suppress warnings
+    # Initialize error_messages
+    error_messages = {}
+    
+    # Suppress sklearn warnings
     warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
     
-    # Prediction button
-    if st.button("Predict Machine Failure"):
+    # Predict button
+    if st.button('Predict Machine Failure'):
         # Validate inputs
         error_messages = validate_input(list(input_data.values()))
         
@@ -86,10 +89,10 @@ def main():
             input_values = list(input_data.values())
             machine_failure, failure_type, prediction_error = predict_machine_failure(input_values)
             
-            if prediction_error:
+            if prediction_error is not None:
                 prediction_error_message = f"Error during prediction: {prediction_error}"
             else:
-                # Interpret and display results
+                # Display predictions
                 machine_failure_result = (
                     "Machine Failure: Yes" if machine_failure == 1 else "Machine Failure: No"
                 )
@@ -99,12 +102,12 @@ def main():
     for field_name, error_message in error_messages.items():
         st.error(f"{field_name}: {error_message}")
     
-    # Display prediction results
+    # Display results
     if prediction_error_message:
         st.error(prediction_error_message)
     else:
         st.success(machine_failure_result)
         st.success(failure_type_result)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
