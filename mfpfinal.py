@@ -42,8 +42,6 @@ hyperparameters = {
     'max_depth': 20
 }
 
-# Create the RandomForestClassifier instance with the specified hyperparameters
-rf_cl = RandomForestClassifier(**hyperparameters)
 rf_cl.fit(X, y)
 
 
