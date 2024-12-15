@@ -33,13 +33,6 @@ def classify(model, X, y):
     print("Accuracy using K-Fold Stratified Cross Validation is,", np.mean(score) * 100)
 
 
-# In[15]:
-
-
-#lg_rg = LogisticRegression(solver= 'liblinear', penalty = 'l1', max_iter = 300, C = 1)
-#lg_rg.fit(X,y)
-from sklearn.ensemble import RandomForestClassifier
-
 # Define hyperparameters as a dictionary
 hyperparameters = {
     'n_estimators': 900,
