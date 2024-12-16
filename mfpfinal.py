@@ -96,9 +96,6 @@ def main():
     # Initialize error_messages with an empty dictionary
     error_messages = {}
 
-    # Suppress the sklearn warning related to feature names
-    warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
-
     # Check if the user has clicked the prediction button
     if st.button('Predict Machine Failure'):
         error_messages = validate_input(list(input_data.values()))
